@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="core.dao.PatientDao">
+	<!-- 插入新患者资料 -->
+	<insert id="savePatient" parameterType="core.entity.Patient">
+		INSERT INTO tcmsearcher.patient (
+			patient_id,
+			patient_name,
+			patient_gender,
+			patient_birthday,
+			patient_marital_status,
+			patient_mobile,
+			patient_address,
+			patient_remark,
+			patient_otherinfo,
+			patient_status
+		)VALUES(
+			#{patient_id},
+			#{patient_name},
+			#{patient_gender},
+			#{patient_birthday},
+			#{patient_marital_status},
+			#{patient_mobile},
+			#{patient_address},
+			#{patient_remark},
+			#{patient_otherinfo},
+			#{patient_status}
+		)		
+	</insert>
+	<!-- 更新,删除病人表 -->
+	<update id="updateTablePatient" parameterType="core.entity.Patient">
+		UPDATE 
+			tcmsearcher.patient
+		SET 
+		<trim suffixOverrides=",">
+			<if test="patient_id!=null">
+				patient_id =#{patient_id} ,
+			</if>
+			<if test="patient_name!=null">
+				patient_name =#{patient_name},
+			</if>
+			<if test="patient_gender!=null">
+				patient_gender =#{patient_gender} ,
+			</if>
+			<if test="patient_birthday!=null">
+				patient_birthday = #{patient_birthday},
+			</if>
+			<if test="patient_marital_status!=null">
+				patient_marital_status =#{patient_marital_status},
+			</if>
+			<if test="patient_mobile!=null">
+				patient_mobile = #{patient_mobile},
+			</if>
+			<if test="patient_address!=null">
+				patient_address = #{patient_address},
+			</if>
+			<if test="patient_remark!=null">
+				patient_remark = #{patient_remark},
+			</if>
+			<if test="patient_otherinfo!=null">
+				patient_otherinfo = #{patient_otherinfo},
+			</if>
+			<if test="patient_status!=null">
+				patient_status = #{patient_status}
+			</if>
+		</trim>
+		WHERE
+			patient_id = #{patient_id};
+	</update>
+	<!-- 根据id查询患者信息 -->
+	<select id="findPatientById" parameterType="string" resultType="core.entity.Patient">
+		select
+			patient_id,
+			patient_name,
+			patient_gender,
+			patient_birthday,
+			patient_marital_status,
+			patient_mobile,
+			patient_address,
+			patient_remark,
+			patient_otherinfo,
+			patient_status
+		from
+			tcmsearcher.patient
+		where
+			patient_id=#{patient_id}
+		and
+			patient_status='1'
+	</select>
+	<!-- 根据姓名查询患者信息 -->
+	<select id="findPatientByName" parameterType="string" resultType="core.entity.Patient">
+		select
+			patient_id,
+			patient_name,
+			patient_gender,
+			patient_birthday,
+			patient_marital_status,
+			patient_mobile,
+			patient_address,
+			patient_remark,
+			patient_otherinfo,
+			patient_status
+		from
+			tcmsearcher.patient
+		where
+			patient_name=#{patient_name}
+		and
+			patient_status='1'
+	</select>	
+	<!-- 模糊查询 -->
+	<select id="findPatientsByAmbiguous" parameterType="map" resultType="core.entity.Patient">
+		select
+			patient_id,
+			patient_name,
+			patient_gender,
+			patient_birthday,
+			patient_marital_status,
+			patient_mobile,
+			patient_address,
+			patient_remark,
+			patient_otherinfo,
+			patient_status
+		from
+			tcmsearcher.patient
+		where
+			patient_otherinfo LIKE CONCAT('%',#{param},'%')
+		and
+			patient_status='1'
+		limit
+			#{start},#{size}
+	</select>
+	
+	
+	
+	
+	
+	
+</mapper>
